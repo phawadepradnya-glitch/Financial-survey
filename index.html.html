@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Mindset Survey - Young Investors</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+        :root {
+            --primary: #1a472a;
+            --accent: #d4af37;
+            --secondary: #2d6a4f;
+            --light: #f5f5f5;
+            --text: #1a1a1a;
+            --border: #e0e0e0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light) 0%, #e8f5e9 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(26, 71, 42, 0.12);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 50px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            color: white;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            animation: slideDown 0.6s ease;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95em;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease;
+        }
+
+        .progress-container {
+            padding: 30px;
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.05) 0%, transparent 100%);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--success) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            font-size: 0.85em;
+            color: var(--secondary);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-content {
+            padding: 40px 30px;
+            min-height: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 35px;
+            animation: fadeInUp 0.5s ease;
+            opacity: 1;
+        }
+
+        .form-group.hidden {
+            display: none;
+            opacity: 0;
+        }
+
+        .question-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .question-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .option-label {
+            display: block;
+            padding: 14px 18px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+
+        .option input:checked + .option-label {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border-color: var(--accent);
+            color: var(--primary);
+            font-weight: 600;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+
+        .option input:checked + .option-label::before {
+            content: '✓';
+            position: absolute;
+            right: 16px;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.2em;
+            animation: checkMark 0.3s ease;
+        }
+
+        .scale-options {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .scale-options .option-label {
+            text-align: center;
+            padding: 12px 8px;
+            font-size: 0.9em;
+        }
+
+        .textarea-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95em;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .textarea-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .checkbox-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .checkbox-option label {
+            cursor: pointer;
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-option input[type="checkbox"]:checked + label {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--success) 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .completion-screen {
+            text-align: center;
+            padding: 60px 30px;
+            display: none;
+        }
+
+        .completion-screen.show {
+            display: block;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .completion-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease;
+        }
+
+        .completion-screen h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .completion-screen p {
+            color: #666;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+
+        .completion-message {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(212, 175, 55, 0.1) 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            border-left: 4px solid var(--success);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes checkMark {
+            from {
+                opacity: 0;
+                transform: scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+
+            .scale-options {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 6px;
+            }
+
+            .scale-options .option-label {
+                font-size: 0.75em;
+                padding: 10px 4px;
+            }
+
+            .button-group {
+                flex-direction: column-reverse;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Financial Mindset</h1>
+            <p>Discover Your Wealth-Building Blueprint</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="currentQuestion">Question 1</span>
+                <span id="totalQuestions">of 12</span>
+            </div>
+        </div>
+
+        <div class="form-content" id="formContent"></div>
+
+        <div class="completion-screen" id="completionScreen">
+            <div class="completion-icon">🎉</div>
+            <h2>You've Got This!</h2>
+            <p>Thank you for sharing your financial perspective.</p>
+            <div class="completion-message">
+                <strong>Survey Complete!</strong>
+                <p style="margin-top: 10px; font-size: 0.9em;">Your insights are helping shape the future of financial education for young investors. Results will be compiled and analyzed for research purposes.</p>
+            </div>
+        </div>
+
+        <div style="padding: 0 30px 30px 30px; display: flex; gap: 12px;" id="buttonGroup">
+            <button class="btn-secondary" id="prevBtn" onclick="previousQuestion()">← Back</button>
+            <button class="btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is your age?",
+                icon: "🎂",
+                type: "radio",
+                options: ["18-20 years", "21-23 years", "24-25 years", "26+ years"]
+            },
+            {
+                question: "Rate your knowledge of investing in assets like stocks, real estate, bonds, mutual funds",
+                icon: "📊",
+                type: "scale",
+                scaleLabel: ["No Knowledge", "Extensive Knowledge"]
+            },
+            {
+                question: "Rate your understanding of how debt and credit work as financial tools",
+                icon: "💳",
+                type: "scale",
+                scaleLabel: ["No Knowledge", "Extensive Knowledge"]
+            },
+            {
+                question: "Rate your knowledge of passive income sources (rental income, dividends, business income)",
+                icon: "💸",
+                type: "scale",
+                scaleLabel: ["No Knowledge", "Extensive Knowledge"]
+            },
+            {
+                question: "Do you agree? 'Strategic use of debt to invest in assets that generate returns can be a wealth-building strategy.'",
+                icon: "🎯",
+                type: "scale",
+                scaleLabel: ["Strongly Disagree", "Strongly Agree"]
+            },
+            {
+                question: "Do you agree? 'Building multiple income streams is important for long-term wealth.'",
+                icon: "🌳",
+                type: "scale",
+                scaleLabel: ["Strongly Disagree", "Strongly Agree"]
+            },
+            {
+                question: "What is your primary barrier to investing or acquiring income-generating assets?",
+                icon: "🚧",
+                type: "radio",
+                options: ["Lack of capital", "Lack of knowledge", "Fear of risk", "No clear strategy", "Other"]
+            },
+            {
+                question: "What is your primary long-term financial goal?",
+                icon: "🎪",
+                type: "radio",
+                options: ["Financial security", "Build wealth through investments", "Own real estate", "Start a business", "Financial independence", "Other"]
+            },
+            {
+                question: "Do you understand how wealthy individuals build wealth differently than average earners?",
+                icon: "🏆",
+                type: "radio",
+                options: ["Yes, significantly different", "Yes, somewhat different", "Not sure", "No", "No understanding"]
+            },
+            {
+                question: "Where do you primarily obtain financial knowledge? (Select all that apply)",
+                icon: "📚",
+                type: "checkbox",
+                options: ["School/university", "Parents/family", "Online content", "Books", "Financial advisors", "Friends", "Work experience", "Other"]
+            },
+            {
+                question: "In a few sentences, what do you believe are the most important factors in building long-term wealth?",
+                icon: "🤔",
+                type: "textarea"
+            },
+            {
+                question: "What financial knowledge or skills do you wish you had learned earlier?",
+                icon: "💡",
+                type: "textarea"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const answers = {};
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const formContent = document.getElementById('formContent');
+            
+            formContent.innerHTML = '';
+
+            const group = document.createElement('div');
+            group.className = 'form-group';
+
+            const questionNum = document.createElement('div');
+            questionNum.className = 'question-number';
+            questionNum.textContent = `Question ${currentQuestionIndex + 1}`;
+            group.appendChild(questionNum);
+
+            const icon = document.createElement('div');
+            icon.className = 'question-icon';
+            icon.textContent = q.icon;
+            group.appendChild(icon);
+
+            const text = document.createElement('div');
+            text.className = 'question-text';
+            text.textContent = q.question;
+            group.appendChild(text);
+
+            if (q.type === 'radio') {
+                const optionsGroup = document.createElement('div');
+                optionsGroup.className = 'options-group';
+
+                q.options.forEach((option, idx) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question-${currentQuestionIndex}`;
+                    input.value = option;
+                    input.id = `option-${currentQuestionIndex}-${idx}`;
+                    if (answers[currentQuestionIndex] === option) {
+                        input.checked = true;
+                    }
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `option-${currentQuestionIndex}-${idx}`;
+                    label.className = 'option-label';
+                    label.textContent = option;
+
+                    optionDiv.appendChild(input);
+                    optionDiv.appendChild(label);
+                    optionsGroup.appendChild(optionDiv);
+                });
+
+                group.appendChild(optionsGroup);
+            } 
+            else if (q.type === 'scale') {
+                const scaleGroup = document.createElement('div');
+                scaleGroup.className = 'scale-options';
+
+                for (let i = 1; i <= 5; i++) {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `question-${currentQuestionIndex}`;
+                    input.value = i;
+                    input.id = `scale-${currentQuestionIndex}-${i}`;
+                    if (answers[currentQuestionIndex] == i) {
+                        input.checked = true;
+                    }
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `scale-${currentQuestionIndex}-${i}`;
+                    label.className = 'option-label';
+                    label.textContent = i;
+
+                    optionDiv.appendChild(input);
+                    optionDiv.appendChild(label);
+                    scaleGroup.appendChild(optionDiv);
+                }
+
+                group.appendChild(scaleGroup);
+
+                const scaleLabels = document.createElement('div');
+                scaleLabels.style.display = 'flex';
+                scaleLabels.style.justifyContent = 'space-between';
+                scaleLabels.style.marginTop = '10px';
+                scaleLabels.style.fontSize = '0.8em';
+                scaleLabels.style.color = '#666';
+                scaleLabels.innerHTML = `<span>${q.scaleLabel[0]}</span><span>${q.scaleLabel[1]}</span>`;
+                group.appendChild(scaleLabels);
+            } 
+            else if (q.type === 'checkbox') {
+                const optionsGroup = document.createElement('div');
+                optionsGroup.className = 'checkbox-options';
+
+                q.options.forEach((option, idx) => {
+                    const checkboxDiv = document.createElement('div');
+                    checkboxDiv.className = 'checkbox-option';
+
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.name = `question-${currentQuestionIndex}`;
+                    input.value = option;
+                    input.id = `checkbox-${currentQuestionIndex}-${idx}`;
+                    
+                    if (answers[currentQuestionIndex] && answers[currentQuestionIndex].includes(option)) {
+                        input.checked = true;
+                    }
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `checkbox-${currentQuestionIndex}-${idx}`;
+                    label.textContent = option;
+
+                    checkboxDiv.appendChild(input);
+                    checkboxDiv.appendChild(label);
+                    optionsGroup.appendChild(checkboxDiv);
+                });
+
+                group.appendChild(optionsGroup);
+            } 
+            else if (q.type === 'textarea') {
+                const textarea = document.createElement('textarea');
+                textarea.className = 'textarea-input';
+                textarea.placeholder = 'Share your thoughts...';
+                if (answers[currentQuestionIndex]) {
+                    textarea.value = answers[currentQuestionIndex];
+                }
+                textarea.onchange = () => {
+                    answers[currentQuestionIndex] = textarea.value;
+                };
+                group.appendChild(textarea);
+            }
+
+            formContent.appendChild(group);
+            updateProgress();
+            updateButtons();
+
+            // Save answers on change
+            setTimeout(() => {
+                const inputs = group.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        if (input.type === 'checkbox') {
+                            const checked = Array.from(group.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                            answers[currentQuestionIndex] = checked;
+                        } else if (input.type === 'radio') {
+                            answers[currentQuestionIndex] = input.value;
+                        } else {
+                            answers[currentQuestionIndex] = input.value;
+                        }
+                    });
+                });
+            }, 0);
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = `Question ${currentQuestionIndex + 1}`;
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').style.display = currentQuestionIndex === 0 ? 'none' : 'block';
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.textContent = 'Complete Survey ✓';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showCompletion();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function showCompletion() {
+            document.getElementById('formContent').style.display = 'none';
+            document.getElementById('buttonGroup').style.display = 'none';
+            document.getElementById('completionScreen').classList.add('show');
+
+            // Log answers to console for easy copying
+            console.log('Survey Responses:', answers);
+            console.log('JSON:', JSON.stringify(answers, null, 2));
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>
